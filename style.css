@@ -38,4 +38,16 @@ body {
     background-color: #FCC956;
     border-radius: 45px;
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5), 0 3px 10px rgba(0, 0, 0, 0.10);
+    /* justify-content: center; */
+    align-items: center;
 }
+
+.display {
+    height: 25%;
+    width: 90%;
+    margin-top: 5%;
+    background-color: #A4A3A9;
+    border-radius: 20px;
+    box-shadow: inset -5px 5px 5px rgba(0, 0, 0, 0.5), inset 5px -5px 5px rgba(0, 0, 0, 0.5)
+}
+
