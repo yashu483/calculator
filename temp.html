@@ -13,13 +13,14 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            background-color: #007bff;
+            align-items: stretch;
+            background-color: white;
             flex-wrap: wrap;
         }
 
         /* Basic styling for the button */
         .elevated-button {
+            flex: 1;
             background-color: #007bff;
             /* A nice blue shade */
             /* margin: auto; */
@@ -62,6 +63,7 @@
 
         .button-container {
             display: flex;
+            flex: 1;
             gap: 10px;
             padding: 10px;
             flex-wrap: wrap;
@@ -70,19 +72,32 @@
 
         .button-container button {
             font-size: 40px;
-            flex: auto;
+            flex: 0;
             background-color: white;
             color: lightgray;
-            border-radius: 150px;
+            border: none;
+            box-shadow: 0px 0px 6px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            border-radius: 50%;
             padding: 60px;
+            margin: auto;
+            /* width: 400px;
+            height: 400px; */
+        }
+
+        .button-container button :active {
+            box-shadow: 0px 0px 6px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            transform: translateY(2px);
+
         }
     </style>
 </head>
 
 <body>
     <button class="elevated-button">Click Me</button>
-    <div>
-        <div class="button-container">
+    <div class="button-container">
+        <button> Its a button</button>
+
+        <!-- <div class="button-container">
             <button class="seven">7</button>
             <button class="eight">8</button>
             <button class="nine">9</button>
@@ -98,7 +113,7 @@
             <button class="zero">0</button>
             <button class="dot">.</button>
 
-        </div>
+        </div> -->
     </div>
 </body>
 
