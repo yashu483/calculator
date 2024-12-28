@@ -4,6 +4,11 @@ let firstOperand = [];
 let secondOperand = [];
 let operator = "";
 let previousValue;
+let tempSecondParaValue = '';
+
+let activeOperand = true; // to check which operand is currently storing the numbers inputed by user,
+//  so dot and state (+/-) can be changed to the correct operand if clicked.
+// true for firstOperand , false for secondOperand
 
 //evaluting functions
 function addition(firstNumber, secondNumber) {
@@ -51,8 +56,7 @@ const firstValuePara = document.querySelector('.current-value');
 const secondValuePara = document.querySelector('.previous-value')
 const allButtons = document.querySelectorAll('button');
 
-// alert(numberButtons[0].classList.contains('one'));
-
+//helper functions
 function toExponential(number) {
     let tempNum = `${number.toExponential(2)}`;
     if (tempNum.includes('e+')) {
@@ -68,7 +72,7 @@ function toExponential(number) {
 
 };
 
-function exponentialSecondPara(number) {
+function exponentialForSecondPara(number) {
     let tempNum = `${number.toExponential(8)}`;
     if (tempNum.includes('e+')) {
         let splitNum = tempNum.split('e+');
@@ -107,8 +111,12 @@ function removeWhitespaceAndCaret(string) {
     return ([+(newArr[0]) * ((+(newArr[1])) ** +(newArr[2]))])
 
 };
-// alert(removeWhitespaceAndCaret('2222 * 10^6'))
 
+function toggleActiveOperandState() {
+    return !activeOperand ? activeOperand = true : activeOperand = false;
+}
+
+//this fn is also used for clear all (AC) button
 function initializeCalculator() {
     firstValuePara.textContent = `START !`;
     secondValuePara.textContent = '';
@@ -118,11 +126,22 @@ function initializeCalculator() {
 };
 
 document.addEventListener('DOMContentLoaded', initializeCalculator);
+
 //functions for buttons clicked
 function operandButtonClicked(event) {
     let target = event.target;
+    if (secondValuePara.textContent == `ERROR! CAN'T DIVIDE BY ZERO`) {
+        secondValuePara.textContent = tempSecondParaValue;
+    }
     if (operator.length !== 0) {
-        secondOperand.push(+(target.textContent));
+        if (secondOperand.length == 1 && secondOperand[0] == '0') {
+            secondOperand.splice(0, 1, +(target.textContent));
+            activeOperand = false;
+        }
+        else {
+            activeOperand = false;
+            secondOperand.push(+(target.textContent));
+        }
         if (secondOperand.length >= 12) {
             let firstValue = +(secondOperand.join(''))
 
@@ -133,7 +152,14 @@ function operandButtonClicked(event) {
         }
     }
     else {
-        firstOperand.push(+(target.textContent));
+        if (firstOperand.length == 1 && firstOperand[0] == 0) {
+            firstOperand.splice(0, 1, +(target.textContent));
+            activeOperand = true;
+        }
+        else {
+            firstOperand.push(+(target.textContent));
+            activeOperand = true;
+        }
         if (firstOperand.length >= 12) {
             let firstValue = +(firstOperand.join(''))
 
@@ -188,41 +214,91 @@ function operatorButtonsClicked(event) {
         else {
             let strForLength = `${solutionNum}`;
             if (strForLength.length >= 15) {
-                secondValuePara.textContent = `${putInParentheses(exponentialSecondPara(solutionNum))} ${operator}`;
+                if (strForLength.includes('e-') || strForLength.includes('e+')) {
+                    secondValuePara.textContent = ``;
+                    firstValuePara.textContent = `VERY  BIG!!🧮`;
+                    firstOperand.splice(0, firstOperand.length);
+                    secondOperand.splice(0, secondOperand.length);
+                    activeOperand = true;
+                    operator = '';
+                } else {
+                    secondValuePara.textContent = `${putInParentheses(exponentialSecondPara(solutionNum))} ${operator}`;
+                    firstOperand.splice(0, firstOperand.length);
+                    let arr = firstOperand.concat(strForLength.split(''));
+                    firstOperand = arr;
+                    secondOperand.splice(0, secondOperand.length, 0);
+                    activeOperand = false;
+                    firstValuePara.textContent = '0';
+                }
             }
             else {
-                secondValuePara.textContent = `${solutionNum}  ${operator}`;
+                if (strForLength.includes('e-') || strForLength.includes('e+')) {
+                    secondValuePara.textContent = ``;
+                    firstValuePara.textContent = `VERY   BIG!!🧮`;
+                    firstOperand.splice(0, firstOperand.length);
+                    secondOperand.splice(0, secondOperand.length);
+                    activeOperand = true;
+                    operator = '';
+                } else {
+                    if (solutionNum == `ERROR`) {
+                        tempSecondParaValue = secondValuePara.textContent;
+                        secondValuePara.textContent = `ERROR! CAN'T DIVIDE BY ZERO`;
+
+                    } else {
+                        secondValuePara.textContent = `${solutionNum}  ${operator}`;
+                        firstOperand.splice(0, firstOperand.length);
+                        let arr = firstOperand.concat(strForLength.split(''));
+                        firstOperand = arr;
+                        console.log(firstOperand);
+                        secondOperand.splice(0, secondOperand.length, 0);
+                        activeOperand = false;
+                        firstValuePara.textContent = '0';
+                    }
+                }
             };
-            firstOperand.splice(0, firstOperand.length);
-            let arr = firstOperand.concat(strForLength.split(''));
-            console.log(arr)
-            firstOperand = arr;
-            console.log(firstOperand);
-            secondOperand.splice(0, secondOperand.length);
-            firstValuePara.textContent = '0';
+
         }
     }
 }
 
-// function toggleSignAndDot(event) {
-//     let targetClassList = event.target.classList;
-//     if (targetClassList.contains('toggle')) {
-//         if (firstOperand[0] == '-') {
-//             firstOperand.splice()
-//         }
-//     }
-//     switch (true) {
-//         case targetClassList.contains('toggle'):
-//     }
-// }
+function clearButtonClicked() {
+    if (activeOperand == true) {
+        firstOperand.pop();
+        if ((firstOperand.join('')).length >= 12) {
+            firstValuePara.textContent = `${toExponential(+(firstOperand.join('')))}`
+        }
+        else {
+            firstValuePara.textContent = `${firstOperand.join('')}`;
+        }
+    }
+    else if (activeOperand == false) {
+        secondOperand.pop();
+        if ((secondOperand.join('')).length >= 12) {
+            firstValuePara.textContent = `${toExponential(+(secondOperand.join('')))}`
+        }
+        else {
+            firstValuePara.textContent = `${secondOperand.join('')}`;
+        }
+    }
+
+};
 
 // button event listeners
 numberButtons.forEach((button) => {
     button.addEventListener('click', operandButtonClicked)
 });
 
-
-
 operatorButtons.forEach((button) => {
     button.addEventListener('click', operatorButtonsClicked)
-})
+});
+
+
+acAndClear.forEach(element => {
+    if (element.textContent == 'A C') {
+        element.addEventListener('click', initializeCalculator);
+    }
+    else {
+        element.addEventListener('click', clearButtonClicked);
+    }
+});;
+
