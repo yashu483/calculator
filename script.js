@@ -193,7 +193,7 @@ function operatorButtonsClicked(event) {
         else {
             if (firstOperand.length >= 15) {
                 operator = target.textContent;
-                secondValuePara.textContent = `${exponentialSecondPara(+(firstOperand.join('')))} ${operator}`;
+                secondValuePara.textContent = `${exponentialForSecondPara(+(firstOperand.join('')))} ${operator}`;
                 firstValuePara.textContent = '0';
             }
             else {
@@ -222,7 +222,7 @@ function operatorButtonsClicked(event) {
                     activeOperand = true;
                     operator = '';
                 } else {
-                    secondValuePara.textContent = `${putInParentheses(exponentialSecondPara(solutionNum))} ${operator}`;
+                    secondValuePara.textContent = `${putInParentheses(exponentialForSecondPara(solutionNum))} ${operator}`;
                     firstOperand.splice(0, firstOperand.length);
                     let arr = firstOperand.concat(strForLength.split(''));
                     firstOperand = arr;
@@ -283,6 +283,27 @@ function clearButtonClicked() {
 
 };
 
+function dotButtonClicked() {
+    if (activeOperand == true && !(firstOperand.join('')).includes('.')) {
+        firstOperand.push('.');
+        if ((firstOperand.join('')).length >= 12) {
+            firstValuePara.textContent = `${toExponential(+(firstOperand.join('')))}`
+        }
+        else {
+            firstValuePara.textContent = `${firstOperand.join('')}`;
+        }
+
+    } else if (activeOperand == false && !(secondOperand.join('')).includes('.')) {
+        secondOperand.push('.');
+        if ((secondOperand.join('')).length >= 12) {
+            firstValuePara.textContent = `${toExponential(+(secondOperand.join('')))}`
+        }
+        else {
+            firstValuePara.textContent = `${secondOperand.join('')}`;
+        }
+    }
+}
+
 // button event listeners
 numberButtons.forEach((button) => {
     button.addEventListener('click', operandButtonClicked)
@@ -302,3 +323,8 @@ acAndClear.forEach(element => {
     }
 });;
 
+toggleStateAndDotButtons.forEach(button => {
+    if (button.textContent == '.') {
+        button.addEventListener('click', dotButtonClicked);
+    }
+})
