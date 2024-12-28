@@ -302,6 +302,49 @@ function dotButtonClicked() {
             firstValuePara.textContent = `${secondOperand.join('')}`;
         }
     }
+};
+
+function toggleStateButtonClicked() {
+    if (activeOperand == true) {
+        if (firstOperand[0] == '-') {
+            firstOperand.shift();
+            if ((firstOperand.join('')).length >= 12) {
+                firstValuePara.textContent = `${toExponential(+(firstOperand.join('')))}`
+            }
+            else {
+                firstValuePara.textContent = `${firstOperand.join('')}`;
+            }
+        }
+        else if (firstOperand[0] !== '-') {
+            firstOperand.unshift('-');
+            if ((firstOperand.join('')).length >= 12) {
+                firstValuePara.textContent = `${toExponential(+(firstOperand.join('')))}`
+            }
+            else {
+                firstValuePara.textContent = `${firstOperand.join('')}`;
+            }
+        }
+    }
+    else if (activeOperand == false) {
+        if (secondOperand[0] == '-') {
+            secondOperand.shift();
+            if ((secondOperand.join('')).length >= 12) {
+                firstValuePara.textContent = `${toExponential(+(secondOperand.join('')))}`
+            }
+            else {
+                firstValuePara.textContent = `${secondOperand.join('')}`;
+            }
+        }
+        else if (secondOperand[0] !== '-') {
+            secondOperand.unshift('-');
+            if ((secondOperand.join('')).length >= 12) {
+                firstValuePara.textContent = `${toExponential(+(secondOperand.join('')))}`
+            }
+            else {
+                firstValuePara.textContent = `${secondOperand.join('')}`;
+            }
+        }
+    }
 }
 
 // button event listeners
@@ -326,5 +369,8 @@ acAndClear.forEach(element => {
 toggleStateAndDotButtons.forEach(button => {
     if (button.textContent == '.') {
         button.addEventListener('click', dotButtonClicked);
+    }
+    else {
+        button.addEventListener('click', toggleStateButtonClicked)
     }
 })
