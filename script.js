@@ -480,7 +480,8 @@ equalButton.addEventListener('click', equalButtonClicked);
 //keyboard support
 function operandKeyPressed(event) {
     let target = event.key;
-    let numString = `1234567890`
+    let numString = `1234567890`;
+    let operatorString = `/*-+`;
     if (numString.includes(target)) {
         if (secondValuePara.textContent == `ERROR! CAN'T DIVIDE BY ZERO`) {
             secondValuePara.textContent = tempSecondParaValue;
@@ -537,5 +538,112 @@ function operandKeyPressed(event) {
 
 };
 
-document.addEventListener("keypress", operandKeyPressed);
+function operatorKeyPressed(event) {
+    let target = event.key;
+    let operatorString = `/*-+`;
+    if (operatorString.includes(target)) {
+        equalButton.isActive = false;
 
+        if (secondOperand.length == 0) {
+            if (operator.length == 0) {
+                operator = target;
+                if (firstOperand.length >= 12) {
+                    let tempNum = toExponential(+(firstOperand.join('')));
+                    secondValuePara.textContent = `${tempNum}  ${operator}`
+                    firstValuePara.textContent = `~`;
+                }
+                else {
+                    if (firstOperand.length != 0) {
+                        secondValuePara.textContent = `${firstOperand.join('')} ${operator}`;
+                        firstValuePara.textContent = `~`;
+                    }
+                };
+            }
+            else {
+                if (firstOperand.length >= 15) {
+                    operator = target;
+                    secondValuePara.textContent = `${exponentialForSecondPara(+(firstOperand.join('')))} ${operator}`;
+                    firstValuePara.textContent = '~';
+                }
+                else {
+                    if (firstOperand.length != 0) {
+                        operator = target;
+                        secondValuePara.textContent = `${firstOperand.join('')} ${operator}`;
+                        firstValuePara.textContent = '~';
+                    };
+                }
+            }
+        }
+        else {
+            let solutionNum = operate(firstOperand, secondOperand, operator);
+            operator = target;
+            if (solutionNum == Infinity || solutionNum == NaN) {
+                secondValuePara.textContent = 'VERY LONG!!';
+                firstValuePara.textContent = 'INFINITE'
+            }
+            else {
+                let strForLength = `${solutionNum}`;
+                if (strForLength.length >= 15) {
+                    if (strForLength.includes('e-') || strForLength.includes('e+')) {
+                        secondValuePara.textContent = ``;
+                        firstValuePara.textContent = `VERY  BIG!!🧮`;
+                        firstOperand.splice(0, firstOperand.length);
+                        secondOperand.splice(0, secondOperand.length);
+                        activeOperand = true;
+                        operator = '';
+                    } else {
+                        secondValuePara.textContent = `${putInParentheses(exponentialForSecondPara(solutionNum))} ${operator}`;
+                        firstOperand.splice(0, firstOperand.length);
+                        let arr = firstOperand.concat(strForLength.split(''));
+                        firstOperand = arr;
+                        secondOperand.splice(0, secondOperand.length);
+                        activeOperand = false;
+                        firstValuePara.textContent = '~';
+                    }
+                }
+                else {
+                    if (strForLength.includes('e-') || strForLength.includes('e+')) {
+                        secondValuePara.textContent = ``;
+                        firstValuePara.textContent = `VERY   BIG!!🧮`;
+                        firstOperand.splice(0, firstOperand.length);
+                        secondOperand.splice(0, secondOperand.length);
+                        activeOperand = true;
+                        operator = '';
+                    } else {
+                        if (solutionNum == `ERROR`) {
+                            tempSecondParaValue = secondValuePara.textContent;
+                            secondValuePara.textContent = `ERROR! CAN'T DIVIDE BY ZERO`;
+
+                        } else {
+                            secondValuePara.textContent = `${solutionNum}  ${operator}`;
+                            firstOperand.splice(0, firstOperand.length);
+                            let arr = firstOperand.concat(strForLength.split(''));
+                            firstOperand = arr;
+                            secondOperand.splice(0, secondOperand.length);
+                            activeOperand = false;
+                            firstValuePara.textContent = '~';
+                        }
+                    }
+                };
+
+            }
+        }
+    }
+};
+
+document.addEventListener("keypress", operandKeyPressed);
+document.addEventListener("keypress", operatorKeyPressed);
+document.addEventListener('keypress', (event) => {
+    if (event.key == 'Enter') {
+        equalButtonClicked();
+    }
+    else if (event.key == `.`) {
+        dotButtonClicked();
+    }
+})
+
+document.addEventListener('keydown', (event) => {
+    if (event.key == 'Backspace') {
+        clearButtonClicked();
+    }
+})
