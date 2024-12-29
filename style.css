@@ -32,19 +32,21 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-color: blueviolet; */
-    background-color: white;
+    background-image: url('/resources/images/blue.avif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
+
 
 .container {
     height: 80vh;
     width: 55vh;
-    /* background-color: rgb(192, 23, 51); */
-    background-color: #FCC956;
+    background-color: #35394C;
     border-radius: 50px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 1), 0 3px 20px rgba(0, 0, 0, 0.10);
     cursor: pointer;
     padding: 8px;
+    border: 2px solid rgb(174, 160, 160);
 }
 
 .second-layer {
@@ -52,10 +54,9 @@ body {
     flex-direction: column;
     height: 100%;
     width: 100%;
-    /* background-color: rgb(43, 213, 45); */
-    background-color: #FCC956;
+    background-color: #35394C;
+    border: 2px solid rgb(213, 198, 198);
     border-radius: 45px;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5), 0 3px 10px rgba(0, 0, 0, 0.10);
     align-items: center;
     gap: 5%;
 }
@@ -70,8 +71,8 @@ body {
     padding: 3%;
     justify-content: space-between;
     background-color: #628b45;
-    /* background-color: #A4A3A9; */
     border-radius: 20px;
+    border: 1px solid rgb(223, 212, 212);
     box-shadow: inset -5px 5px 5px rgba(0, 0, 0, 0.5), inset 5px -5px 5px rgba(0, 0, 0, 0.5)
 }
 
@@ -130,9 +131,12 @@ button {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), 0 3px 6px rgba(0, 0, 0, 0.10);
     cursor: pointer;
     transform: translateY(-3px);
+    border: 2px solid rgb(234, 223, 223);
+    color: white;
+    background: linear-gradient(to bottom right, #4df2f2, #5f6df1, #f560bc);
     font-family: 'Digital-7', 'DS-DIGITAL', 'Orbitron';
-    /* transition: all 0.2s ease-in-out; */
 }
+
 
 button:active {
     box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.2), inset -3px -3px rgba(0, 0, 0, 0.2);
@@ -187,12 +191,12 @@ button:active {
 .substraction,
 .addition,
 .division,
-.multiply,
-.dot,
-.toggle {
+.multiply {
     /* background-color: rgb(82, 231, 82); */
-    background-color: rgb(84, 121, 245);
+    /* background-color: rgb(84, 121, 245); */
     /* background-color: rgb(6, 188, 249); */
+    background: linear-gradient(to bottom right, rgb(235, 183, 87), rgb(223, 110, 18), rgb(246, 192, 91));
+    /* background: linear-gradient(to bottom, rgb(255, 255, 255),rgb(233, 229, 229), #23D3D2, #23D3D2, #23D3D2, #23D3D2, #23D3D2, #23D3D2, #23D3D2); */
 }
 
 .equal {
@@ -200,20 +204,28 @@ button:active {
     height: 50%;
     border-radius: 50px;
     border: none;
-    background-color: #FF8446;
+    /* background-color: #FF8446; */
+    background: linear-gradient(to bottom right, pink, blue, pink);
+    /* background: linear-gradient(to bottom, rgb(218, 218, 130), #dc9c3d, #f15ae9); */
     margin-top: auto;
 
 }
 
 .clear {
-    background-color: #FF8446;
+    background: linear-gradient(to bottom right, pink, rgb(224, 38, 69), pink);
+    /* background: linear-gradient(to right, #FF8446, #FF8446); */
 }
 
 .ac {
-    background-color: rgb(231, 94, 117);
+    background: linear-gradient(to bottom right, pink, rgb(224, 38, 69), pink);
     word-spacing: -10px;
 }
 
 .multiply {
     font-weight: 400;
+}
+
+.dot,
+.toggle {
+    background: linear-gradient(to bottom right, rgb(77, 229, 77), green, rgb(88, 232, 88));
 }
