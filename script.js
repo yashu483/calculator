@@ -113,10 +113,6 @@ function removeWhitespaceAndCaret(string) {
 
 };
 
-function toggleActiveOperandState() {
-    return !activeOperand ? activeOperand = true : activeOperand = false;
-}
-
 //this fn is also used for clear all (AC) button
 function initializeCalculator() {
     equalButton.isActive = false;
@@ -443,6 +439,11 @@ function equalButtonClicked() {
         };
 
     }
+};
+
+// functions for keyboard support
+function keyboardNumberKeyPressed(event) {
+    let target = event.target;
 }
 
 // button event listeners
@@ -474,3 +475,67 @@ toggleStateAndDotButtons.forEach(button => {
 });
 
 equalButton.addEventListener('click', equalButtonClicked);
+
+
+//keyboard support
+function operandKeyPressed(event) {
+    let target = event.key;
+    let numString = `1234567890`
+    if (numString.includes(target)) {
+        if (secondValuePara.textContent == `ERROR! CAN'T DIVIDE BY ZERO`) {
+            secondValuePara.textContent = tempSecondParaValue;
+        };
+        if (equalButton.isActive) {
+            return;
+        }
+        else if (operator.length !== 0) {
+            if (secondOperand.length == 1 && secondOperand[0] == '0') {
+                secondOperand.splice(0, 1, +(target));
+                activeOperand = false;
+            }
+            else {
+                activeOperand = false;
+                secondOperand.push(+(target));
+            }
+            if (secondOperand.length >= 12) {
+                let firstValue = +(secondOperand.join(''))
+                firstValuePara.textContent = toExponential(firstValue);
+                if (firstOperand.length >= 16) {
+                    secondValuePara.textContent = `${putInParentheses(exponentialForSecondPara(+(firstOperand.join(''))))} ${operator}`;
+                } else {
+                    secondValuePara.textContent = `${firstOperand.join('')} ${operator}`
+                }
+            }
+            else {
+                firstValuePara.textContent = secondOperand.join('');
+                if (firstOperand.length >= 16) {
+                    secondValuePara.textContent = `${putInParentheses(exponentialForSecondPara(+(firstOperand.join(''))))} ${operator}`;
+                } else {
+                    secondValuePara.textContent = `${firstOperand.join('')} ${operator}`
+                }
+            }
+        }
+        else {
+            if (firstOperand.length == 1 && firstOperand[0] == 0) {
+                firstOperand.splice(0, 1, +(target));
+                activeOperand = true;
+            }
+            else {
+                firstOperand.push(+(target));
+                activeOperand = true;
+            }
+            if (firstOperand.length >= 12) {
+                let firstValue = +(firstOperand.join(''))
+
+                return firstValuePara.textContent = toExponential(firstValue);
+            }
+            else {
+                firstValuePara.textContent = firstOperand.join('');
+            }
+        }
+    }
+
+};
+
+document.addEventListener("keypress", operandKeyPressed);
+
