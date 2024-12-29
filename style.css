@@ -32,10 +32,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('/resources/images/blue.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: #016AE9;
 }
 
 
