@@ -52,6 +52,7 @@ const numberButtons = document.querySelectorAll('.operand');
 const operatorButtons = document.querySelectorAll('.operator');
 const toggleStateAndDotButtons = document.querySelectorAll('.group-signs');
 const acAndClear = document.querySelectorAll('.group-clear');
+const equalButton = document.querySelector('.equal');
 const firstValuePara = document.querySelector('.current-value');
 const secondValuePara = document.querySelector('.previous-value')
 const allButtons = document.querySelectorAll('button');
@@ -118,7 +119,8 @@ function toggleActiveOperandState() {
 
 //this fn is also used for clear all (AC) button
 function initializeCalculator() {
-    firstValuePara.textContent = `START !`;
+    equalButton.isActive = false;
+    firstValuePara.textContent = `HELLO  WORLD!`;
     secondValuePara.textContent = '';
     firstOperand.splice(0, firstOperand.length);
     secondOperand.splice(0, secondOperand.length);
@@ -132,8 +134,11 @@ function operandButtonClicked(event) {
     let target = event.target;
     if (secondValuePara.textContent == `ERROR! CAN'T DIVIDE BY ZERO`) {
         secondValuePara.textContent = tempSecondParaValue;
+    };
+    if (equalButton.isActive) {
+        return;
     }
-    if (operator.length !== 0) {
+    else if (operator.length !== 0) {
         if (secondOperand.length == 1 && secondOperand[0] == '0') {
             secondOperand.splice(0, 1, +(target.textContent));
             activeOperand = false;
@@ -144,11 +149,20 @@ function operandButtonClicked(event) {
         }
         if (secondOperand.length >= 12) {
             let firstValue = +(secondOperand.join(''))
-
-            return firstValuePara.textContent = toExponential(firstValue);
+            firstValuePara.textContent = toExponential(firstValue);
+            if (firstOperand.length >= 16) {
+                secondValuePara.textContent = `${putInParentheses(exponentialForSecondPara(+(firstOperand.join(''))))} ${operator}`;
+            } else {
+                secondValuePara.textContent = `${firstOperand.join('')} ${operator}`
+            }
         }
         else {
             firstValuePara.textContent = secondOperand.join('');
+            if (firstOperand.length >= 16) {
+                secondValuePara.textContent = `${putInParentheses(exponentialForSecondPara(+(firstOperand.join(''))))} ${operator}`;
+            } else {
+                secondValuePara.textContent = `${firstOperand.join('')} ${operator}`
+            }
         }
     }
     else {
@@ -176,6 +190,7 @@ function operandButtonClicked(event) {
 
 function operatorButtonsClicked(event) {
     let target = event.target;
+    equalButton.isActive = false;
 
     if (secondOperand.length == 0) {
         if (operator.length == 0) {
@@ -183,29 +198,32 @@ function operatorButtonsClicked(event) {
             if (firstOperand.length >= 12) {
                 let tempNum = toExponential(+(firstOperand.join('')));
                 secondValuePara.textContent = `${tempNum}  ${operator}`
-                firstValuePara.textContent = `0`;
+                firstValuePara.textContent = `~`;
             }
             else {
-                secondValuePara.textContent = `${firstOperand.join('')}  ${operator}`;
-                firstValuePara.textContent = `0`;
+                if (firstOperand.length != 0) {
+                    secondValuePara.textContent = `${firstOperand.join('')} ${operator}`;
+                    firstValuePara.textContent = `~`;
+                }
             };
         }
         else {
             if (firstOperand.length >= 15) {
                 operator = target.textContent;
                 secondValuePara.textContent = `${exponentialForSecondPara(+(firstOperand.join('')))} ${operator}`;
-                firstValuePara.textContent = '0';
+                firstValuePara.textContent = '~';
             }
             else {
-                operator = target.textContent;
-                secondValuePara.textContent = `${firstOperand.join('')}  ${operator}`;
-                firstValuePara.textContent = '0';
+                if (firstOperand.length != 0) {
+                    operator = target.textContent;
+                    secondValuePara.textContent = `${firstOperand.join('')} ${operator}`;
+                    firstValuePara.textContent = '~';
+                };
             }
         }
     }
     else {
         let solutionNum = operate(firstOperand, secondOperand, operator);
-        console.log(solutionNum);
         operator = target.textContent;
         if (solutionNum == Infinity || solutionNum == NaN) {
             secondValuePara.textContent = 'VERY LONG!!';
@@ -226,9 +244,9 @@ function operatorButtonsClicked(event) {
                     firstOperand.splice(0, firstOperand.length);
                     let arr = firstOperand.concat(strForLength.split(''));
                     firstOperand = arr;
-                    secondOperand.splice(0, secondOperand.length, 0);
+                    secondOperand.splice(0, secondOperand.length);
                     activeOperand = false;
-                    firstValuePara.textContent = '0';
+                    firstValuePara.textContent = '~';
                 }
             }
             else {
@@ -250,9 +268,9 @@ function operatorButtonsClicked(event) {
                         let arr = firstOperand.concat(strForLength.split(''));
                         firstOperand = arr;
                         console.log(firstOperand);
-                        secondOperand.splice(0, secondOperand.length, 0);
+                        secondOperand.splice(0, secondOperand.length);
                         activeOperand = false;
-                        firstValuePara.textContent = '0';
+                        firstValuePara.textContent = '~';
                     }
                 }
             };
@@ -262,6 +280,7 @@ function operatorButtonsClicked(event) {
 }
 
 function clearButtonClicked() {
+    equalButton.isActive = false;
     if (activeOperand == true) {
         firstOperand.pop();
         if ((firstOperand.join('')).length >= 12) {
@@ -285,20 +304,28 @@ function clearButtonClicked() {
 
 function dotButtonClicked() {
     if (activeOperand == true && !(firstOperand.join('')).includes('.')) {
-        firstOperand.push('.');
         if ((firstOperand.join('')).length >= 12) {
+            firstOperand.push('.');
             firstValuePara.textContent = `${toExponential(+(firstOperand.join('')))}`
         }
         else {
+            if (firstOperand.length == 0) {
+                firstOperand.unshift('0');
+            };
+            firstOperand.push('.');
             firstValuePara.textContent = `${firstOperand.join('')}`;
         }
 
     } else if (activeOperand == false && !(secondOperand.join('')).includes('.')) {
-        secondOperand.push('.');
         if ((secondOperand.join('')).length >= 12) {
+            secondOperand.push('.');
             firstValuePara.textContent = `${toExponential(+(secondOperand.join('')))}`
         }
         else {
+            if (secondOperand.length == 0) {
+                secondOperand.unshift('0');
+            }
+            secondOperand.push('.');
             firstValuePara.textContent = `${secondOperand.join('')}`;
         }
     }
@@ -345,6 +372,77 @@ function toggleStateButtonClicked() {
             }
         }
     }
+};
+
+function equalButtonClicked() {
+    let solutionNum = operate(firstOperand, secondOperand, operator);
+    if (secondOperand.length != 0) {
+        equalButton.isActive = true;
+    } else equalButton.isActive = false;
+    if (secondOperand.length == 0) {
+        if (firstOperand.length >= 12) {
+            firstValuePara.textContent = `${toExponential(+(firstOperand.join('')))}`
+            secondValuePara.textContent = '';
+            activeOperand = true;
+        } else {
+            firstValuePara.textContent = `${firstOperand.join('')}`;
+            secondValuePara.textContent = '';
+            activeOperand = true;
+        }
+    }
+    else if (solutionNum == Infinity || solutionNum == NaN) {
+        secondValuePara.textContent = 'VERY LONG!!';
+        firstValuePara.textContent = 'INFINITE'
+        operator = '';
+    }
+    else {
+        let strForLength = `${solutionNum}`;
+        if (strForLength.length >= 12) {
+            if (strForLength.includes('e-') || strForLength.includes('e+')) {
+                secondValuePara.textContent = ``;
+                firstValuePara.textContent = `VERY  BIG!!🧮`;
+                firstOperand.splice(0, firstOperand.length);
+                secondOperand.splice(0, secondOperand.length);
+                activeOperand = true;
+                operator = '';
+            } else {
+                firstValuePara.textContent = `=   ${toExponential(solutionNum)}`;
+                firstOperand.splice(0, firstOperand.length);
+                let arr = firstOperand.concat(strForLength.split(''));
+                firstOperand = arr;
+                secondOperand.splice(0, secondOperand.length);
+                activeOperand = true;
+                operator = '';
+                secondValuePara.textContent = '';
+            }
+        }
+        else {
+            if (strForLength.includes('e-') || strForLength.includes('e+')) {
+                secondValuePara.textContent = ``;
+                firstValuePara.textContent = `VERY   BIG!!🧮`;
+                firstOperand.splice(0, firstOperand.length);
+                secondOperand.splice(0, secondOperand.length);
+                activeOperand = true;
+                operator = '';
+            } else {
+                if (solutionNum == `ERROR`) {
+                    tempSecondParaValue = secondValuePara.textContent;
+                    secondValuePara.textContent = `ERROR! CAN'T DIVIDE BY ZERO`;
+                    equalButton.isActive = false;
+                } else {
+                    firstValuePara.textContent = `${solutionNum}`;
+                    firstOperand.splice(0, firstOperand.length);
+                    let arr = firstOperand.concat(strForLength.split(''));
+                    firstOperand = arr;
+                    operator = '';
+                    secondOperand.splice(0, secondOperand.length);
+                    activeOperand = true;
+                    secondValuePara.textContent = '';
+                }
+            }
+        };
+
+    }
 }
 
 // button event listeners
@@ -373,4 +471,6 @@ toggleStateAndDotButtons.forEach(button => {
     else {
         button.addEventListener('click', toggleStateButtonClicked)
     }
-})
+});
+
+equalButton.addEventListener('click', equalButtonClicked);
