@@ -119,6 +119,7 @@ function removeWhitespaceAndCaret(string) {
 
 //this fn is also used for clear all (AC) button
 function initializeCalculator() {
+    audio.play();
     equalButton.isActive = false;
     firstValuePara.textContent = `HELLO  WORLD!`;
     secondValuePara.textContent = '';

@@ -87,6 +87,7 @@ body {
     margin-top: 1.8vh;
     font-weight: 400;
     overflow: hidden;
+    color: rgb(33, 32, 32);
 
 }
 
@@ -98,6 +99,7 @@ body {
     margin-bottom: 1.5vh;
     margin-right: 3vmin;
     font-weight: 400;
+    color: rgb(33, 32, 32);
 }
 
 .button-container {
@@ -111,14 +113,12 @@ body {
 
 .rectangle-button-row {
     display: flex;
-    /* border: 2px solid red; */
     height: 8.5%;
     justify-content: space-between;
     gap: 7%;
 }
 
 .rectangle-button-row button {
-    /* height: 30%; */
     flex: 1;
     border-radius: 15px;
     border: none;
@@ -154,7 +154,6 @@ button:active {
     flex-direction: column;
     justify-content: space-between;
     width: 75%;
-    /* gap: 2%; */
 }
 
 .left-button-section div {
@@ -192,28 +191,20 @@ button:active {
 .addition,
 .division,
 .multiply {
-    /* background-color: rgb(82, 231, 82); */
-    /* background-color: rgb(84, 121, 245); */
-    /* background-color: rgb(6, 188, 249); */
     background: linear-gradient(to bottom right, rgb(235, 183, 87), rgb(223, 110, 18), rgb(246, 192, 91));
-    /* background: linear-gradient(to bottom, rgb(255, 255, 255),rgb(233, 229, 229), #23D3D2, #23D3D2, #23D3D2, #23D3D2, #23D3D2, #23D3D2, #23D3D2); */
 }
 
 .equal {
-    /* width: 27%; */
     height: 50%;
     border-radius: 50px;
     border: none;
-    /* background-color: #FF8446; */
     background: linear-gradient(to bottom right, pink, blue, pink);
-    /* background: linear-gradient(to bottom, rgb(218, 218, 130), #dc9c3d, #f15ae9); */
     margin-top: auto;
 
 }
 
 .clear {
     background: linear-gradient(to bottom right, pink, rgb(224, 38, 69), pink);
-    /* background: linear-gradient(to right, #FF8446, #FF8446); */
 }
 
 .ac {
