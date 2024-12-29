@@ -57,6 +57,10 @@ const firstValuePara = document.querySelector('.current-value');
 const secondValuePara = document.querySelector('.previous-value')
 const allButtons = document.querySelectorAll('button');
 
+const audio = new Audio('resources/sounds/beep.mp3');
+audio.playbackRate = 2.0;
+audio.volume = 1.0;
+
 //helper functions
 function toExponential(number) {
     let tempNum = `${number.toExponential(2)}`;
@@ -127,6 +131,7 @@ document.addEventListener('DOMContentLoaded', initializeCalculator);
 
 //functions for buttons clicked
 function operandButtonClicked(event) {
+    audio.play();
     let target = event.target;
     if (secondValuePara.textContent == `ERROR! CAN'T DIVIDE BY ZERO`) {
         secondValuePara.textContent = tempSecondParaValue;
@@ -185,6 +190,7 @@ function operandButtonClicked(event) {
 }
 
 function operatorButtonsClicked(event) {
+    audio.play();
     let target = event.target;
     equalButton.isActive = false;
 
@@ -276,6 +282,7 @@ function operatorButtonsClicked(event) {
 }
 
 function clearButtonClicked() {
+    audio.play();
     equalButton.isActive = false;
     if (activeOperand == true) {
         firstOperand.pop();
@@ -299,6 +306,7 @@ function clearButtonClicked() {
 };
 
 function dotButtonClicked() {
+    audio.play();
     if (activeOperand == true && !(firstOperand.join('')).includes('.')) {
         if ((firstOperand.join('')).length >= 12) {
             firstOperand.push('.');
@@ -328,6 +336,7 @@ function dotButtonClicked() {
 };
 
 function toggleStateButtonClicked() {
+    audio.play();
     if (activeOperand == true) {
         if (firstOperand[0] == '-') {
             firstOperand.shift();
@@ -371,6 +380,7 @@ function toggleStateButtonClicked() {
 };
 
 function equalButtonClicked() {
+    audio.play();
     let solutionNum = operate(firstOperand, secondOperand, operator);
     if (secondOperand.length != 0) {
         equalButton.isActive = true;
@@ -441,11 +451,6 @@ function equalButtonClicked() {
     }
 };
 
-// functions for keyboard support
-function keyboardNumberKeyPressed(event) {
-    let target = event.target;
-}
-
 // button event listeners
 numberButtons.forEach((button) => {
     button.addEventListener('click', operandButtonClicked)
@@ -479,6 +484,7 @@ equalButton.addEventListener('click', equalButtonClicked);
 
 //keyboard support
 function operandKeyPressed(event) {
+    audio.play();
     let target = event.key;
     let numString = `1234567890`;
     let operatorString = `/*-+`;
@@ -539,6 +545,7 @@ function operandKeyPressed(event) {
 };
 
 function operatorKeyPressed(event) {
+    audio.play();
     let target = event.key;
     let operatorString = `/*-+`;
     if (operatorString.includes(target)) {
